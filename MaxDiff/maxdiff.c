@@ -1,7 +1,7 @@
 //---------------------------------------------------------------
 // i386 (32 bit), return maximal differention between arguments
 //
-// To compile&link: gcc -o maxdiff maxdiff.c maxdiffa.s
+// To compile&link: gcc -m32 -o maxdiff maxdiff.c maxdiffa.s
 // To run:          ./maxdiff
 //
 //---------------------------------------------------------------
