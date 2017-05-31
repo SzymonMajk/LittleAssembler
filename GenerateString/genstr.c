@@ -1,5 +1,5 @@
 //---------------------------------------------------------------
-// (64 bit), return maximal differention between arguments
+// (64 bit), return string with letters created from second argument depends on last argument
 //
 // To compile&link: gcc -o genstr genstr.c genstr.s
 // To run:          ./genstr

@@ -1,5 +1,5 @@
 //---------------------------------------------------------------
-// (64 bit), return maximal differention between arguments
+// (64 bit), return string with combined letters from second and third argument
 //
 // To compile&link: gcc -o create_str create_str.c create_str.s
 // To run:          ./create_str
