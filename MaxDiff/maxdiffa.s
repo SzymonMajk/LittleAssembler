@@ -1,5 +1,5 @@
 #----------------------------------------------------------------
-# Assebmler version of max_diff for maxdiff program, i386 (32 bit)
+# Assebmler version of max_diff for maxdiff program (64 bit)
 #----------------------------------------------------------------
 
 	.text
@@ -8,39 +8,56 @@
 
 max_diffA:	
 
-#prolog funkcji
-	push %ebp
-	mov %esp,%ebp
+	#Kolejne argumenty w rejestrach rdi, rsi, rdx, rcx
+	#Nie wolno zmienić zawartości rbp,rbx,r12,r13,r14,r15
 
-#miejsce dla dwóch zmiennych lokalnych
-	# min -4(%ebp)
-	# max -8(%ebp)
-	sub $8, %esp
+	#Najpierw sprawdzam wzajemną relację dwóch pierwszy argumentów, jeden z nich będzie przechowywał wartość najmniejszą, a drugi największą, następnie osobno każdy z nich porównam z pozostałymi argumentami, na końcu odejmę zawartość największą od najmniejszej
 
+	#W rejestrze docelowo rdi będzie znajdowała się wartość największa
 
-#otrzymujemy cztery zmienne, więc ich kolejne adresy to 4(%ebp), 8(%ebp), 12(%ebp), 16(%ebp)
+	cmp %rdi,%rsi
+	jbe pierwszywiekszy
 
-#przypisuje pierwsza zmienna jako najwieksza i najmniejsza, jeżeli trzeba pozostałe zmienią te wyniki
-	mov 4(%ebp), %eax
-	mov %eax, -4(%ebp)
-	mov %eax, -8(%ebp)
+	Push %rbp
+	mov %rsi,%rbp
+	mov %rdi,%rsi
+	mov %rbp,%rdi
+	Pop %rbp
 
-#sprawdzam w pętli każdy z arguntów czy mniejszy od najmniejszego albo czy wiekszy od najwiekszego
-	movl $3, %ecx
+pierwszywiekszy:
 
-next:
-	# część odpowiedzialna za sprawdzanie wartości
-	dec %ecx
-	cmp $0, %ecx
-	jnz next
+	#W tym momencie w %rdi znajduje się największa wartość spośród dwóch pierwszych argumentów, natomiast w %rsi najmniejsza
 
-#odejmuje wartosc najwieksza od najmniejszej i wynik w %eax
+	#Szukanie najwiekszej
 
-	mov -8(%ebp), %eax
-	sub -4(%ebp), %eax
+	cmp %rdi,%rdx
+	jbe trzecimniejszy
+	mov %rdx,%rdi
 
-#trailer funkcji
-	mov %ebp,%esp
-	pop %ebp
+trzecimniejszy:
+	cmp %rdi,%rcx
+	jbe czwartymniejszy
+	mov %rcx, %rdi
+
+czwartymniejszy:
+
+	#Analogiczne szukanie najmniejszej
+
+	cmp %rsi,%rdx
+	jge trzeciwiekszy
+	mov %rdx,%rsi
+
+trzeciwiekszy:
+	cmp %rsi,%rcx
+	jge czwartywiekszy
+	mov %rcx, %rsi
+
+czwartywiekszy:
+
+	#Odejmuję największy od najmniejszego i mam maxdiff
+
+	sub %rsi, %rdi
+	mov %rdi, %rax
+
 	ret
 
