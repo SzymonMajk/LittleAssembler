@@ -14,8 +14,6 @@ generate_strA:
 	#Najpierw zapisujemy w rax pierwszego argumentu, aby zapamiętać gdzie zaczynał się ciąg znaków, następnie w pętli wykonującej się liczbę razy podaną w trzecim argumencie wyłuskujemy kolejne pozycje znaków, gdzie zmieniamy argument, na kolejny lub ustalony w drugim argumencie w zależności od czwartego argumentu
 
 	mov %rdi,%rax
-	push %rdi
-
 next:
 	mov %rsi,(%rdi)
 	inc %rdi
@@ -31,6 +29,5 @@ notchange:
 
 	movb $0, (%rdi)
 
-	pop %rax
 	ret
 

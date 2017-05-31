@@ -1,20 +1,20 @@
 //---------------------------------------------------------------
 // (64 bit), return maximal differention between arguments
 //
-// To compile&link: gcc -o genstr genstr.c genstr.s
-// To run:          ./genstr
+// To compile&link: gcc -o create_str create_str.c create_str.s
+// To run:          ./create_str
 //
 //---------------------------------------------------------------
 
 #include <stdio.h>
 #include <stdlib.h>
 
-char* generate_strA(char* s, int c, int n, int inc);
+char* create_strA(char* s, char* a, char* b);
 
 void main( void )
 {
 	char* buf = malloc(1000);
 
-	printf("As = %s\n",generate_strA(buf,'a',3,0));
-	printf("As = %s\n",generate_strA(buf,'c',8,1));
+	printf("As = %s\n",create_strA(buf,"aa","bb"));
+	printf("As = %s\n",create_strA(buf,"niezle"," 1234 "));
 }
