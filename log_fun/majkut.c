@@ -22,6 +22,6 @@ void main( void )
   int a = -1;
   int b = -1;
   
-  printf("As = %d, ",fun(1,5,&a,&b));
+  printf("As = %d, ",fun(2,5,&a,&b));
   printf("pcs = %d, count = %d\n",a,b);
 }

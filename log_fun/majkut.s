@@ -18,23 +18,45 @@ fun:
 	#Wykonuję pętlę, która będzie sprawdzała pierwszy bit rejestru %rdi
 	#jeżeli w zależności czy było tam zero czy jedynka wykonuję jakąś operację
 	
-	movq $64, %r10
+	#na później Push %rdi
+	movq $0, %r10
+	movq $0, %r8
+	movq $0, %r9
 next:
 	mov %r10, %rax
 	
 	#W tym miejscu sprawdzam pierwszy bit i wykonuję odpowiednią operację
 	
-	dec %r10
-	cmp $0, %r10
+	#Sprawdzam pierwszy bit od prawej jest równy 1
+	and $1, %rdi
+	jz gotzero
+	
+	#Teraz wiem że to była jedynka
+	#Musze sprawdzić czy przypadkiem już nie przypisywałem %r8
+	cmp $0, %r8
+	je ostatnijuz
+	mov %r10,%r8
+	
+ostatnijuz:
+	#Teraz skoro była jedynka to jeszcze zwiększam ilość znalezionych jedynek
+	add $1, %r9
+	
+gotzero:
+	#Teraz gdy nastąpił odpowiedni efekt w związku z pierwszym bitem, przesuwam rejestr rdi
+	#w prawo o jeden, żeby sprawdzić drugi bit i dekrementuję iterator
+	shr $1, %rdi
+	inc %r10
+	cmp $64, %r10
 	jne next
 	
-	movq $10, %r8
+	#Koniec pętli, w tym momencie w rejestrze %r8 powinien znaleźć się indeks ostatniego bitu
+	#natomiast r rejestrze %r9, suma ilości bitów które były jedynkami
+	
 	movq %r8, (%rdx)
+	movq %r9, (%rcx)
 	
-	movq $20, %r8
-	movq %r8, (%rcx)
-	
-	#mov $0, %rax
+	#tutaj do testu
+	mov %r9, %rax
 
 	ret
 
