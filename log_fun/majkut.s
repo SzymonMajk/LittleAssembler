@@ -14,32 +14,30 @@ fun:
 	#W %r8 przechowam indeks ostatniego bitu, który ma jedynkę
 	#W %r9 przechowam sume bitów równych jeden
 	#Rejestr %r10 będzie iteratorem
+	#Rejestr %r11 będzie przechowywał tymczasową wartość maski
 	
 	#Wykonuję pętlę, która będzie sprawdzała pierwszy bit rejestru %rdi
-	#jeżeli w zależności czy było tam zero czy jedynka wykonuję jakąś operację
+	#w zależności czy było tam zero czy jedynka wykonuję jakąś operację
 	
 	#na później Push %rdi
 	movq $0, %r10
-	movq $0, %r8
+	movq $-1, %r8
 	movq $0, %r9
-next:
-	mov %r10, %rax
-	
-	#W tym miejscu sprawdzam pierwszy bit i wykonuję odpowiednią operację
-	
-	#Sprawdzam pierwszy bit od prawej jest równy 1
-	and $1, %rdi
+next:		
+	#Sprawdzam czy pierwszy bit od prawej jest równy 1
+	movq $1, %r11
+	and %rdi, %r11
 	jz gotzero
 	
 	#Teraz wiem że to była jedynka
 	#Musze sprawdzić czy przypadkiem już nie przypisywałem %r8
-	cmp $0, %r8
-	je ostatnijuz
+	cmp $-1, %r8
+	jne ostatnijuz
 	mov %r10,%r8
 	
 ostatnijuz:
 	#Teraz skoro była jedynka to jeszcze zwiększam ilość znalezionych jedynek
-	add $1, %r9
+	inc %r9
 	
 gotzero:
 	#Teraz gdy nastąpił odpowiedni efekt w związku z pierwszym bitem, przesuwam rejestr rdi
@@ -56,7 +54,7 @@ gotzero:
 	movq %r9, (%rcx)
 	
 	#tutaj do testu
-	mov %r9, %rax
+	mov %r8, %rax
 
 	ret
 
