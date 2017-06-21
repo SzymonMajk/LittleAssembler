@@ -1,5 +1,5 @@
 # Function get four parameters:
-#  we will be looking for number of bits and sum of indexes of bits with value one in the, the number to looking must be send in first parameter (we are counting bits from right to left),
+#  we will be looking for number of bits and sum of indexes of bits with value one in the, the number to looking must be send in first parameter (we are counting bits from right to left, indexing from zero),
 # when second parameter is 2 we return multiplied indexes, if parameter is 1 then we return sum indexes, otherwise we must return 0,
 #  we use third parameter to return value of first bit from the right which value is equal to one, return -1 means all bits are 0,
 #  we use fourth parameter to return number of bits whose value is equal to one
@@ -15,14 +15,14 @@ fun:
 	#In register r9 I will storage current value of my bit mask
 	#My loop will be looking for first bit from right in %rdi value and proceed operations defined in function description
 
-        #######################################################################
+	#############################################################################
 	
 	#A need to check neutral value for sum or multiply in rax
-	Push %rbx
+	Push %rbx #I gonna use rbx as accumulator so I need to protect its value
 	mov $0, %rax
-        cmp $2, %rsi
-        jne noMultiply
-        mov $1, %rax
+	cmp $2, %rsi
+	jne noMultiply
+	mov $1, %rax
         
 noMultiply:
 	#Initialise values for my tmp registers
@@ -46,16 +46,17 @@ lastAlreadySet:
 	inc %rbx
 	
 	#In case of value in second parametr, proceed multiply or sum
-        cmp $2, %rsi
-        jne trySum
-        #multiply...
-        je lastBitEqualZero
+	cmp $2, %rsi
+	jne trySum
+	Push %rdx
+	imul %r8,%rax
+	Pop %rdx
+	je lastBitEqualZero
         
 trySum:
-        cmp $1, %rsi
-        jne lastBitEqualZero
-        #sum...
-	
+	cmp $1, %rsi
+	jne lastBitEqualZero
+	add %r8,%rax
 lastBitEqualZero:
 	#Shrink right rdi, to get vaule of next bit on the left of actual first right, then increment iterator
 	shr $1, %rdi
@@ -63,8 +64,8 @@ lastBitEqualZero:
 	cmp $64, %r8
 	jne checkNextBit
 	
-        #I need to rewrite number of ones to fourth parameter
-        movl %ebx, (%rcx)
+	#I need to rewrite number of ones to fourth parameter
+	movl %ebx,(%rcx)
 	Pop %rbx
 	
 	ret
