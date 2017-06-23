@@ -1,7 +1,7 @@
 # Function get four parameters:
 #  we will be looking for number of bits and sum of indexes of bits with value one in the, the number to looking must be send in first parameter (we are counting bits from right to left, indexing from zero),
 # when second parameter is 2 we return multiplied indexes, if parameter is 1 then we return sum indexes, otherwise we must return 0,
-#  we use third parameter to return value of first bit from the right which value is equal to one, return -1 means all bits are 0,
+#  we use third parameter to return index of first bit from the right which value is equal to one, return -1 means all bits are 0,
 #  we use fourth parameter to return number of bits whose value is equal to one
 	
 	.text
